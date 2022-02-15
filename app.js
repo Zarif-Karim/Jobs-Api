@@ -7,18 +7,17 @@ const app = express();
 //imports
 const connect_db = require('./database/connect');
 const { 
-    not_found, error_handler
+    not_found, error_handler, authenticate_user
 } = require('./middlewares')
+const auth_router = require('./routes/auth');
+const jobs_router = require('./routes/jobs');
 
 //middleware
 app.use(express.json()); //parse request.body for json
 
-//app.use(express.static('./public'));
-
 //routes
-app.get('/', (req,res) => {
-    res.status(200).send('<h2> Home Page </h2>');
-});
+app.use('/api/v1/auth', auth_router);
+app.use('/api/v1/jobs', authenticate_user, jobs_router);
 
 app.use(not_found);
 app.use(error_handler);
