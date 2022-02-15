@@ -14,6 +14,7 @@ const jobs_router = require('./routes/jobs');
 
 //middleware
 app.use(express.json()); //parse request.body for json
+app.use(express.urlencoded({extended:false}));
 
 //routes
 app.use('/api/v1/auth', auth_router);
