@@ -7,7 +7,7 @@ const authenticate_user = async (req,res,next) => {
     if(!auth_header || !auth_header.startsWith('Bearer ')){
         throw new AuthenticationError('Access Denied: Unauthorized');
     }
-
+    
     const token = auth_header.split(' ')[1];
     try {
         const payload = await jwt.verify(token,process.env.JWT_SECRET);

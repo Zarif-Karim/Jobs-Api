@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const user_schema = new mongoose.Schema({
     name : {
         type: String,
-        required: [true, "Name must be entered"],
+        required: [true, "Name cannot be empty"],
         minlength: 3,
         maxlength: 30
     },

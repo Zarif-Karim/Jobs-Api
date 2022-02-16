@@ -15,8 +15,15 @@ const jobs_router = require('./routes/jobs');
 //middleware
 app.use(express.json()); //parse request.body for json
 app.use(express.urlencoded({extended:false}));
+app.use((req,res,next)=>{
+    console.log(req.method, req.url);
+    next();
+});
 
 //routes
+app.get('/',(req,res)=>{
+    res.status(200).json({data: 'Dummy Home Page'});
+});
 app.use('/api/v1/auth', auth_router);
 app.use('/api/v1/jobs', authenticate_user, jobs_router);
 
