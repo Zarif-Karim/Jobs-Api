@@ -1,9 +1,11 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const user_schema = new mongoose.Schema({
     name : {
         type: String,
-        required: [true, "Name must be entered"],
+        required: [true, "Name cannot be empty"],
         minlength: 3,
         maxlength: 30
     },
@@ -22,5 +24,22 @@ const user_schema = new mongoose.Schema({
         minlength: 6
     }
 });
+
+user_schema.pre('save', async function(){
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+});
+
+user_schema.methods.create_token = function(){
+    return jwt.sign(
+        {userID: this._id, userName: this.name},
+        process.env.JWT_SECRET,
+        { expiresIn: "7d"}
+    );
+}
+
+user_schema.methods.compare_password = function (given) {
+    return bcrypt.compare(given,this.password);
+}
 
 module.exports = mongoose.model('User', user_schema);
